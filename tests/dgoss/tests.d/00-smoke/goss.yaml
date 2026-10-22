@@ -5,6 +5,10 @@ command:
     stdout:
       - "dgoss smoketest"
 
+  ca_certificates_installed_with_trust_bundle:
+    exec: "rpm -q ca-certificates && test -s /etc/pki/tls/certs/ca-bundle.crt"
+    exit-status: 0
+
   bazzite_hardware_setup_has_valid_shell_syntax:
     exec: "/usr/bin/bash -n /usr/libexec/bazzite-hardware-setup"
     exit-status: 0

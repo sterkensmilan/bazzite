@@ -189,12 +189,13 @@ RUN --mount=type=cache,dst=/var/cache \
     /ctx/global-remove && \
     /ctx/cleanup
 
-# Install new packages
+# Update CA certificates and install new packages
 RUN --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     --mount=type=secret,id=GITHUB_TOKEN \
+    dnf5 -y upgrade --refresh ca-certificates && \
     dnf5 -y install \
         $(/ctx/ghcurl https://api.github.com/repos/ublue-os/cicpoffs/releases/latest | jq -r --arg name "cicpoffs-fc${FEDORA_VERSION}.rpm" '.assets[] | select(.name == $name).browser_download_url') && \
     dnf5 -y copr enable bieszczaders/kernel-cachyos-addons && \
